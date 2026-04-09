@@ -1,12 +1,12 @@
 package ru.yandex.practicum.sleeptracker;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-
 import ru.yandex.practicum.sleeptracker.functions.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SleepTrackerAppTest {
     private final TotalSessionsCount totalSessions = new TotalSessionsCount();

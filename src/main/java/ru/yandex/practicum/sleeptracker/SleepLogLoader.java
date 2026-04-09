@@ -13,7 +13,7 @@ public class SleepLogLoader {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm");
 
-    public List<SleepingSession> load (String fileName) throws IOException {
+    public List<SleepingSession> load(String fileName) throws IOException {
         List<String> lines = Files.readAllLines(Paths.get(fileName), StandardCharsets.UTF_8);
 
         return lines.stream()
