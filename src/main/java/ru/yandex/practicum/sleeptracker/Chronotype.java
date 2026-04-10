@@ -7,7 +7,7 @@ public enum Chronotype {
 
     private final String name;
 
-    Chronotype(final String name) {
+    private Chronotype(final String name) {
         this.name = name;
     }
 

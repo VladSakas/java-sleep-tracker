@@ -13,16 +13,24 @@ public class SleepTrackerApp {
 
     public static void main(String[] args) {
 
-        addAnalysisFunction(new TotalSessionsCount());
-        addAnalysisFunction(new MinDuration());
-        addAnalysisFunction(new MaxDuration());
-        addAnalysisFunction(new AverageDuration());
-        addAnalysisFunction(new BadQualityCount());
-        addAnalysisFunction(new SleeplessNights());
-        addAnalysisFunction(new ChronotypeDetect());
+        addAnalysisFunctions(List.of(
+                new TotalSessionsCount(),
+                new MinDuration(),
+                new MaxDuration(),
+                new AverageDuration(),
+                new BadQualityCount(),
+                new SleeplessNights(),
+                new ChronotypeDetect()
+        ));
 
         try {
-            List<SleepingSession> sessions = loader.load("sleep_log.txt");
+            String filePath;
+            if (args.length > 0) {
+                filePath = args[0];
+            } else {
+                filePath = "sleep_log.txt";
+            }
+            List<SleepingSession> sessions = loader.load(filePath);
 
             functions.stream()
                     .map(f -> f.apply(sessions))
@@ -33,7 +41,7 @@ public class SleepTrackerApp {
         }
     }
 
-    public static void addAnalysisFunction(Function function) {
-        functions.add(function);
+    public static void addAnalysisFunctions(List<Function> newFunctions) {
+        functions.addAll(newFunctions);
     }
 }

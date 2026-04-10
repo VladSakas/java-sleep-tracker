@@ -162,6 +162,50 @@ public class SleepTrackerAppTest {
         assertEquals(0L, result.getValue());
     }
 
+    // Первая ночь после полуночи, остальные до
+    @Test
+    public void sleeplessNightsShouldCountCorrectlyWhenFirstSessionStartsAfterMidnight() {
+        List<SleepingSession> sessions = List.of(
+                new SleepingSession(
+                        LocalDateTime.of(2026, 4, 10, 2, 0),
+                        LocalDateTime.of(2026, 4, 10, 7, 0),
+                        SleepQuality.NORMAL
+                ),
+                new SleepingSession(
+                        LocalDateTime.of(2026, 4, 10, 23, 0),
+                        LocalDateTime.of(2026, 4, 11, 7, 0),
+                        SleepQuality.NORMAL
+                ),
+                new SleepingSession(
+                        LocalDateTime.of(2026, 4, 11, 23, 0),
+                        LocalDateTime.of(2026, 4, 12, 7, 0),
+                        SleepQuality.NORMAL
+                )
+        );
+        SleepAnalysisResult result = sleeplessNightsFunction.apply(sessions);
+        assertEquals(0L, result.getValue());
+    }
+
+    // Граница месяца
+    @Test
+    public void sleeplessNightsShouldCorrectWorkWithDifferentMonths() {
+        List<SleepingSession> sessions = List.of(
+                new SleepingSession(
+                        LocalDateTime.of(2026, 4, 30, 23, 0),
+                        LocalDateTime.of(2026, 5, 1, 7, 0),
+                        SleepQuality.NORMAL
+                ),
+                new SleepingSession(
+                        LocalDateTime.of(2026, 5, 2, 7, 0),
+                        LocalDateTime.of(2026, 5, 2, 11, 0),
+                        SleepQuality.NORMAL
+                )
+        );
+
+        SleepAnalysisResult result = sleeplessNightsFunction.apply(sessions);
+        assertEquals(1L, result.getValue());
+    }
+
     // ===================== TEST ChronotypeDetect =====================
 
     // Пустой список - Голубь
@@ -209,6 +253,37 @@ public class SleepTrackerAppTest {
                         SleepQuality.NORMAL
                 )
         );
+        SleepAnalysisResult result = chronotypeDetect.apply(sessions);
+        assertEquals("Голубь", result.getValue());
+    }
+
+    // Ничья
+    @Test
+    public void chronotypeShouldReturnDoveForDrawBetweenOwlAndLark() {
+        List<SleepingSession> sessions = List.of(
+                new SleepingSession(
+                        LocalDateTime.of(2026, 4, 10, 23, 30),
+                        LocalDateTime.of(2026, 4, 11, 9, 30),
+                        SleepQuality.NORMAL
+                ),
+                new SleepingSession(
+                        LocalDateTime.of(2026, 4, 12, 23, 30),
+                        LocalDateTime.of(2026, 4, 13, 9, 30),
+                        SleepQuality.NORMAL
+                ),
+                // Жаворонок: 2 ночи
+                new SleepingSession(
+                        LocalDateTime.of(2026, 4, 11, 21, 30),
+                        LocalDateTime.of(2026, 4, 12, 6, 30),
+                        SleepQuality.NORMAL
+                ),
+                new SleepingSession(
+                        LocalDateTime.of(2026, 4, 13, 21, 30),
+                        LocalDateTime.of(2026, 4, 14, 6, 30),
+                        SleepQuality.NORMAL
+                )
+        );
+
         SleepAnalysisResult result = chronotypeDetect.apply(sessions);
         assertEquals("Голубь", result.getValue());
     }

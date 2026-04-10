@@ -1,5 +1,6 @@
 package ru.yandex.practicum.sleeptracker;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -13,14 +14,15 @@ public class SleepLogLoader {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm");
 
-    public List<SleepingSession> load(String fileName) throws IOException {
-        List<String> lines = Files.readAllLines(Paths.get(fileName), StandardCharsets.UTF_8);
-
-        return lines.stream()
-                .filter(line -> !line.isBlank())
-                .map(line -> line.split(";"))
-                .map(this::parseLine)
-                .collect(Collectors.toList());
+    public List<SleepingSession> load(String filePath) throws IOException {
+        
+        try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), StandardCharsets.UTF_8)) {
+            return reader.lines()
+                    .filter(line -> !line.isBlank())
+                    .map(line -> line.split(";"))
+                    .map(this::parseLine)
+                    .collect(Collectors.toList());
+        }
     }
 
     private SleepingSession parseLine(String[] parts) {
