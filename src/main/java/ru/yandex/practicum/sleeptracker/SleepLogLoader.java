@@ -15,7 +15,7 @@ public class SleepLogLoader {
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm");
 
     public List<SleepingSession> load(String filePath) throws IOException {
-        
+
         try (BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), StandardCharsets.UTF_8)) {
             return reader.lines()
                     .filter(line -> !line.isBlank())
